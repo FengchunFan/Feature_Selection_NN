@@ -42,7 +42,7 @@ def Forward_Selection(num_feature):
             best_feature = temp_best_feature
         else:
             print("(Warning, Accuracy has decreased!)")
-            print()
+            done = True
         level += 1
         if(level == num_feature):
             done = True
@@ -81,7 +81,7 @@ def Backward_Elimination(num_feature):
             best_feature = temp_best_feature
         else:
             print("(Warning, Accuracy has decreased!)")
-            print()
+            done = True
         level += 1
         if(level == num_feature):
             done = True
