@@ -12,7 +12,7 @@ class Node:
         return self.evaluation
 
 def evaluation():
-    return random.randint(1,100)/100
+    return round(random.uniform(0, 100), 2)
 
 def Forward_Selection(num_feature):
     print("You have chosen Forward Selection Method")
@@ -24,13 +24,14 @@ def Forward_Selection(num_feature):
     print()
     done = False
     level = 0
+    feature = []
     best_feature = []
     while(done == False):
         temp_highest_accuracy = 0
         temp_best_feature = []
         for i in range(1, num_feature + 1):
-            if i not in best_feature:
-                temp_node = Node([i] + best_feature, evaluation())
+            if i not in feature:
+                temp_node = Node([i] + feature, evaluation())
                 print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
                 if(temp_node.get_evaluation() > temp_highest_accuracy):
                     temp_highest_accuracy = temp_node.get_evaluation()
@@ -40,9 +41,11 @@ def Forward_Selection(num_feature):
         if(temp_highest_accuracy >= highest_accuracy):
             highest_accuracy = temp_highest_accuracy
             best_feature = temp_best_feature
+            feature = temp_best_feature
         else:
             print("(Warning, Accuracy has decreased!)")
-            done = True
+            feature = temp_best_feature #continues
+            print()
         level += 1
         if(level == num_feature):
             done = True
@@ -58,15 +61,16 @@ def Backward_Elimination(num_feature):
     print()
     done = False
     level = 0
+    feature = []
     best_feature = []
     for i in range(1, num_feature+1):
-        best_feature = best_feature + [i]
+        feature = feature + [i]
     
     while(done == False):
         temp_highest_accuracy = 0
         temp_best_feature = []
         for i in range(1, num_feature + 1):
-            copy_feature = best_feature.copy()
+            copy_feature = feature.copy()
             if i in copy_feature:
                 copy_feature.remove(i)
                 temp_node = Node(copy_feature, evaluation())
@@ -79,9 +83,11 @@ def Backward_Elimination(num_feature):
         if(temp_highest_accuracy >= highest_accuracy):
             highest_accuracy = temp_highest_accuracy
             best_feature = temp_best_feature
+            feature = temp_best_feature
         else:
             print("(Warning, Accuracy has decreased!)")
-            done = True
+            feature = temp_best_feature #continues
+            print()
         level += 1
         if(level == num_feature):
             done = True
