@@ -9,17 +9,45 @@ class Node:
         return self.features
     
     def get_evaluation(self):
-        return (self.evaluation)/100
+        return self.evaluation
 
 def evaluation():
-    return random.randint(1,100)
+    return random.randint(1,100)/100
 
-def Forward_Selection():
+def Forward_Selection(num_feature):
     print("choose 1")
-    temp = Node({4,5}, evaluation())
-    print(temp.get_features(), "has an accuracy of", temp.get_evaluation(), "%")
+    highest_accuracy = evaluation()
+    print("Using no features and \"random\" evalution, I got an accuracy of", highest_accuracy, "%")
+    print()
+    print("Beginning search.")
+    print()
+    done = False
+    level = 0
+    best_feature = []
+    while(done == False):
+        temp_highest_accuracy = 0
+        temp_best_feature = []
+        for i in range(1, num_feature + 1):
+            if i not in best_feature:
+                temp_node = Node([i] + best_feature, evaluation())
+                print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
+                if(temp_node.get_evaluation() > temp_highest_accuracy):
+                    temp_highest_accuracy = temp_node.get_evaluation()
+                    temp_best_feature = temp_node.get_features()
+        print("Feature set", temp_best_feature, "was best, accuracy is", temp_highest_accuracy, "%")
+        print()
+        if(temp_highest_accuracy >= highest_accuracy):
+            highest_accuracy = temp_highest_accuracy
+            best_feature = temp_best_feature
+        else:
+            print("(Warning, Accuracy has decreased!)")
+            done = True
+        level += 1
+        if(level == num_feature):
+            done = True
+    print("Finished search!! The best feature subset is", best_feature, "which has an accuracy of", highest_accuracy, "%")
 
-def Backward_Elimination():
+def Backward_Elimination(num_feature):
     print("choose 2")
 
 print("Welcome to (Fengchun Fan, ffan005, 01)'s Feature Selection Algorithm")
@@ -33,8 +61,8 @@ selected_algorithm = 0
 while(selected_algorithm != 1 and selected_algorithm != 2):
     selected_algorithm = int(input())
     if(selected_algorithm == 1):
-        Forward_Selection()
+        Forward_Selection(num_feature)
     elif(selected_algorithm == 2):
-        Backward_Elimination()
+        Backward_Elimination(num_feature)
     else:
         print("invalid choice")
