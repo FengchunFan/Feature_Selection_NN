@@ -64,8 +64,9 @@ def Backward_Elimination(num_feature):
     feature = []
     best_feature = []
     for i in range(1, num_feature+1):
-        feature = feature + [i]
-    
+        feature = feature + [i] 
+        best_feature = best_feature + [i]
+
     while(done == False):
         temp_highest_accuracy = 0
         temp_best_feature = []
