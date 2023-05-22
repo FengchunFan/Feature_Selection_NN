@@ -97,7 +97,21 @@ def Backward_Elimination(num_feature):
 
 
 print("Welcome to (Fengchun Fan, ffan005, 01)'s Feature Selection Algorithm")
-num_feature = int(input("Please enter total number of features: "))
+#num_feature = int(input("Please enter total number of features: "))
+file_name = input("Please enter the name of the dataset you want to work on: ")
+num_instances = 0
+with open(file_name, "r") as file:
+    one_line = file.readline() #first line
+    num_feature = one_line.count(".") - 1 #get number of features in the dataset
+    num_instances += 1
+    for line in file:
+        num_instances += 1
+file.close()
+print()
+print("You have chosen", file_name)
+print("total number of features in this dataset is:", num_feature)
+print("total number of instances in this dataset is:", num_instances)
+print()
 
 print("Type the number of the algorithm you want to run.")
 print("1. Forward Selection")
