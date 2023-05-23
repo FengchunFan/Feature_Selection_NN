@@ -11,12 +11,16 @@ class Node:
     def get_evaluation(self):
         return self.evaluation
 
-def evaluation():
-    return round(random.uniform(0, 100), 2)
+#need real evaluation functions, return accuracy calculated through NN classifier
+def evaluation(feature, file_name):
+    #print("working on", file_name, "with features:", feature)
+    return len(feature)
 
-def Forward_Selection(num_feature):
+def Forward_Selection(num_feature, file_name):
     print("You have chosen Forward Selection Method")
-    highest_accuracy = evaluation()
+    feature = []
+    best_feature = []
+    highest_accuracy = evaluation(feature, file_name)
     print()
     print("Using no features and \"random\" evalution, I got an accuracy of", highest_accuracy, "%")
     print()
@@ -24,14 +28,13 @@ def Forward_Selection(num_feature):
     print()
     done = False
     level = 0
-    feature = []
-    best_feature = []
+    
     while(done == False):
         temp_highest_accuracy = 0
         temp_best_feature = []
         for i in range(1, num_feature + 1):
             if i not in feature:
-                temp_node = Node([i] + feature, evaluation())
+                temp_node = Node([i] + feature, evaluation([i] + feature, file_name))
                 print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
                 if(temp_node.get_evaluation() > temp_highest_accuracy):
                     temp_highest_accuracy = temp_node.get_evaluation()
@@ -51,9 +54,14 @@ def Forward_Selection(num_feature):
             done = True
     print("Finished search!! The best feature subset is", best_feature, "which has an accuracy of", highest_accuracy, "%")
 
-def Backward_Elimination(num_feature):
+def Backward_Elimination(num_feature, file_name):
     print("You have chosen Backward_Elimination Method")
-    highest_accuracy = evaluation()
+    feature = []
+    best_feature = []
+    for i in range(1, num_feature+1):
+        feature = feature + [i] 
+        best_feature = best_feature + [i]
+    highest_accuracy = evaluation(feature, file_name)
     print()
     print("Using all features and \"random\" evalution, I got an accuracy of", highest_accuracy, "%")
     print()
@@ -61,11 +69,6 @@ def Backward_Elimination(num_feature):
     print()
     done = False
     level = 0
-    feature = []
-    best_feature = []
-    for i in range(1, num_feature+1):
-        feature = feature + [i] 
-        best_feature = best_feature + [i]
 
     while(done == False):
         temp_highest_accuracy = 0
@@ -74,7 +77,7 @@ def Backward_Elimination(num_feature):
             copy_feature = feature.copy()
             if i in copy_feature:
                 copy_feature.remove(i)
-                temp_node = Node(copy_feature, evaluation())
+                temp_node = Node(copy_feature, evaluation(copy_feature, file_name))
                 print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
                 if(temp_node.get_evaluation() > temp_highest_accuracy):
                     temp_highest_accuracy = temp_node.get_evaluation()
@@ -121,8 +124,8 @@ selected_algorithm = 0
 while(selected_algorithm != 1 and selected_algorithm != 2):
     selected_algorithm = int(input())
     if(selected_algorithm == 1):
-        Forward_Selection(num_feature)
+        Forward_Selection(num_feature, file_name)
     elif(selected_algorithm == 2):
-        Backward_Elimination(num_feature)
+        Backward_Elimination(num_feature, file_name)
     else:
         print("invalid choice")
