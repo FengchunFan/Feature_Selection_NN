@@ -1,4 +1,5 @@
 import random
+import math
 
 class Node:
     def __init__(self, features, evaluation):
@@ -15,9 +16,20 @@ class Node:
 def evaluation(feature, dataset, num_instances):
     #print("working on", file_name, "with features:", feature)
     total_correct = 0
-    for i in range (num_instances):
-        test_index = i
+    for i in range (num_instances): #i is the test index
         predicted_label = 0
+        smallest_difference = 9999
+        for j in range (num_instances):
+            if i != j:
+                difference = 0
+                for k in range (len(feature)):
+                    difference += abs(dataset[j][feature[k]] - dataset[i][feature[k]])
+                difference = math.sqrt(difference)
+                if (difference < smallest_difference):
+                    smallest_difference = difference
+                    predicted_label = dataset[j][0]
+        if(predicted_label == dataset[i][0]):
+            total_correct += 1
     #eva_accuracy = round(random.uniform(0, 100), 2)
     eva_accuracy = total_correct/num_instances
     return eva_accuracy
