@@ -1,5 +1,6 @@
 import random
 import math
+import time
 
 class Node:
     def __init__(self, features, evaluation):
@@ -18,20 +19,21 @@ def evaluation(feature, dataset, num_instances):
     total_correct = 0
     for i in range (num_instances): #i is the test index
         predicted_label = 0
-        smallest_difference = 9999
+        smallest_difference = 99999
+        #compare dataset[i] with rest of the datasets denoting at index j
         for j in range (num_instances):
             if i != j:
                 difference = 0
                 for k in range (len(feature)):
                     difference += abs(dataset[j][feature[k]] - dataset[i][feature[k]])
                 difference = math.sqrt(difference)
-                if (difference < smallest_difference):
+                if (difference <= smallest_difference):
                     smallest_difference = difference
                     predicted_label = dataset[j][0]
         if(predicted_label == dataset[i][0]):
             total_correct += 1
     #eva_accuracy = round(random.uniform(0, 100), 2)
-    eva_accuracy = total_correct/num_instances
+    eva_accuracy = 100*total_correct/num_instances
     return eva_accuracy
 
 def Forward_Selection(num_feature, dataset, num_instances):
@@ -50,6 +52,7 @@ def Forward_Selection(num_feature, dataset, num_instances):
     while(done == False):
         temp_highest_accuracy = 0
         temp_best_feature = []
+        start_time = time.time()
         for i in range(1, num_feature + 1):
             if i not in feature:
                 temp_node = Node([i] + feature, evaluation([i] + feature, dataset, num_instances))
@@ -57,7 +60,10 @@ def Forward_Selection(num_feature, dataset, num_instances):
                 if(temp_node.get_evaluation() > temp_highest_accuracy):
                     temp_highest_accuracy = temp_node.get_evaluation()
                     temp_best_feature = temp_node.get_features()
+        end_time = time.time()
+        time_spent = end_time - start_time
         print("Feature set", temp_best_feature, "was best, accuracy is", temp_highest_accuracy, "%")
+        print("The step has taken approximate time of: ", round(time_spent,5), "seconds")
         print()
         if(temp_highest_accuracy >= highest_accuracy):
             highest_accuracy = temp_highest_accuracy
@@ -91,6 +97,7 @@ def Backward_Elimination(num_feature, dataset, num_instances):
     while(done == False):
         temp_highest_accuracy = 0
         temp_best_feature = []
+        start_time = time.time()
         for i in range(1, num_feature + 1):
             copy_feature = feature.copy()
             if i in copy_feature:
@@ -100,7 +107,10 @@ def Backward_Elimination(num_feature, dataset, num_instances):
                 if(temp_node.get_evaluation() > temp_highest_accuracy):
                     temp_highest_accuracy = temp_node.get_evaluation()
                     temp_best_feature = temp_node.get_features()
+        end_time = time.time()
+        time_spent = end_time - start_time
         print("Feature set", temp_best_feature, "was best, accuracy is", temp_highest_accuracy, "%")
+        print("The step has taken approximate time of: ", round(time_spent,5), "seconds")
         print()
         if(temp_highest_accuracy >= highest_accuracy):
             highest_accuracy = temp_highest_accuracy
@@ -112,8 +122,7 @@ def Backward_Elimination(num_feature, dataset, num_instances):
             print()
         level += 1
         if(level == num_feature):
-            done = True
-    
+            done = True    
     print("Finished search!! The best feature subset is", best_feature, "which has an accuracy of", highest_accuracy, "%")
 
 
