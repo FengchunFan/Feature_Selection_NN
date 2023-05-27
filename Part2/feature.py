@@ -42,7 +42,7 @@ def Forward_Selection(num_feature, dataset, num_instances):
     best_feature = []
     highest_accuracy = evaluation(feature, dataset, num_instances)
     print()
-    print("Using no features and \"random\" evalution, I got an accuracy of", highest_accuracy, "%")
+    print("Using no features, I got an accuracy of", highest_accuracy, "%")
     print()
     print("Beginning search.")
     print()
@@ -87,7 +87,7 @@ def Backward_Elimination(num_feature, dataset, num_instances):
         best_feature = best_feature + [i]
     highest_accuracy = evaluation(feature, dataset, num_instances)
     print()
-    print("Using all features and \"random\" evalution, I got an accuracy of", highest_accuracy, "%")
+    print("Using all features, I got an accuracy of", highest_accuracy, "%")
     print()
     print("Beginning search.")
     print()
