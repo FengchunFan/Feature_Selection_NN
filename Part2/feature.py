@@ -16,6 +16,16 @@ class Node:
 #need real evaluation functions, return accuracy calculated through NN classifier
 def evaluation(feature, dataset, num_instances):
     #print("working on", file_name, "with features:", feature)
+    #default rate
+    if(len(feature) == 0):
+        num_class_1 = 0
+        num_class_2 = 0
+        for i in range (num_instances):
+            if(dataset[i][0] == 1):
+                num_class_1 += 1
+            else:
+                num_class_2 += 1
+        return (100*max(num_class_1,num_class_2) / num_instances)
     total_correct = 0
     for i in range (num_instances): #i is the test index
         predicted_label = 0
