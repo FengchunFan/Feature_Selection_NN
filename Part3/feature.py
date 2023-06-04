@@ -135,9 +135,35 @@ def Backward_Elimination(num_feature, dataset, num_instances):
     print("Finished search!! The best feature subset is", best_feature, "which has an accuracy of", highest_accuracy, "%")
 
 #each feature column normalize with (f_i-min_col)/(max_col-min_col)
-def normalize(dataset, num_instances):
+#dataset passed in by reference, changes will inherit
+def normalize_r(dataset, num_feature, num_instances):
     for j in range(1, num_feature + 1):
-        print(dataset[0][j])
+        max_column = -9999
+        min_column = 9999
+        for i in range (num_instances):
+            if(dataset[i][j] > max_column):
+                max_column = dataset[i][j]
+            elif(dataset[i][j] < min_column):
+                min_column = dataset[i][j]
+        if(max_column != min_column):
+            for k in range (num_instances):
+                dataset[k][j] = (dataset[k][j] - min_column)/(max_column - min_column)
+    print("finished normalization")
+
+#Z normalization f_i = (f_i - mean) / std
+def normalize_z(dataset, num_feature, num_instances):
+    for j in range(1, num_feature + 1):
+        sum = 0
+        mean = 0
+        std = 0
+        for i in range(num_instances):
+            sum = sum + dataset[i][j]
+        mean = sum / num_instances
+        for k in range(num_instances):
+            std = std + ((dataset[k][j] - mean)**2)
+        std = math.sqrt(std / num_instances)
+        for z in range(num_instances):
+            dataset[z][j] = (dataset[z][j] - mean)/std
     print("finished normalization")
 
 print("Welcome to (Fengchun Fan, ffan005, 01)'s Feature Selection Algorithm")
@@ -169,9 +195,15 @@ print()
 print("Do you want to normalize the current dataset?")
 normalize_option = input("Type \"yes\" to normalize, else to continue without normalization: ")
 if(normalize_option == "yes"):
-    print("first feature instance before normalize:", dataset[0][1])
-    normalize(dataset, num_feature)
-    print("first feature instance after normalize:", dataset[0][1])
+    normalize_option_2 = input("Type \"1\" for regular normalization and \"2\" for z normalization: ")
+    if(normalize_option_2 == 1):
+        print("You have chosen to perform regular normalization")
+        normalize_r(dataset, num_feature, num_instances)
+    elif(normalize_option_2 == 2):
+        print("You have chosen to perform z normalization")
+        normalize_z(dataset, num_feature, num_instances)
+    else:
+        print("invalid input, exit normalization process")
 print()
 
 print("Type the number of the algorithm you want to run.")
