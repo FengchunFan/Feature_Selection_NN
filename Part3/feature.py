@@ -195,13 +195,17 @@ print()
 print("Do you want to normalize the current dataset?")
 normalize_option = input("Type \"yes\" to normalize, else to continue without normalization: ")
 if(normalize_option == "yes"):
-    normalize_option_2 = input("Type \"1\" for regular normalization and \"2\" for z normalization: ")
+    normalize_option_2 = int(input("Type \"1\" for regular normalization and \"2\" for z normalization: "))
     if(normalize_option_2 == 1):
         print("You have chosen to perform regular normalization")
+        print("instance for row 0 feature 1 before normalization: ", dataset[0][1])
         normalize_r(dataset, num_feature, num_instances)
+        print("instance for row 0 feature 1 after normalization: ", dataset[0][1])
     elif(normalize_option_2 == 2):
         print("You have chosen to perform z normalization")
+        print("instance for row 0 feature 1 before normalization: ", dataset[0][1])
         normalize_z(dataset, num_feature, num_instances)
+        print("instance for row 0 feature 1 after normalization: ", dataset[0][1])
     else:
         print("invalid input, exit normalization process")
 print()
