@@ -1,5 +1,6 @@
 import math
 import time
+import matplotlib.pyplot as plt
 
 class Node:
     def __init__(self, features, evaluation):
@@ -166,6 +167,32 @@ def normalize_z(dataset, num_feature, num_instances):
             dataset[z][j] = (dataset[z][j] - mean)/std
     print("finished normalization")
 
+#plot features and color code by class
+def print_dataset(dataset, num_instances):
+    input_x = int(input("select the feature number to be displayed as X axis: "))
+    input_y = int(input("select the feature number to be displayed as Y axis: "))
+    x_1 = []
+    y_1 = []
+    x_2 = []
+    y_2 = []
+    for i in range (num_instances):
+        if (dataset[i][0] == 1):
+            x_1.append(dataset[i][input_x])
+            y_1.append(dataset[i][input_y])
+        elif (dataset[i][0] == 2):
+            x_2.append(dataset[i][input_x])
+            y_2.append(dataset[i][input_y])
+        else:
+            print("something is going wrong!!!")
+    plt.scatter(x_1, y_1, color='red')
+    plt.scatter(x_2, y_2, color='blue')
+    plt.xlabel('feature number: ' + str(input_x))
+    plt.ylabel('feature number: ' + str(input_y))
+    plt.title('instances of dataset by color and feature')
+    plt.show()
+    print("dataset printed")
+print()
+
 print("Welcome to (Fengchun Fan, ffan005, 01)'s Feature Selection Algorithm")
 #num_feature = int(input("Please enter total number of features: "))
 file_name = input("Please enter the name of the dataset you want to work on: ")
@@ -223,3 +250,10 @@ while(selected_algorithm != 1 and selected_algorithm != 2):
         Backward_Elimination(num_feature, dataset, num_instances)
     else:
         print("invalid choice")
+print()
+
+print("Do you want to print the current dataset?")
+print_option = input("Type \"yes\" to print, else to continue: ")
+if(print_option == "yes"):
+    print_dataset(dataset, num_instances)
+print()
