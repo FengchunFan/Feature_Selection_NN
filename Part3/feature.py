@@ -134,6 +134,11 @@ def Backward_Elimination(num_feature, dataset, num_instances):
             done = True    
     print("Finished search!! The best feature subset is", best_feature, "which has an accuracy of", highest_accuracy, "%")
 
+#each feature column normalize with (f_i-min_col)/(max_col-min_col)
+def normalize(dataset, num_instances):
+    for j in range(1, num_feature + 1):
+        print(dataset[0][j])
+    print("finished normalization")
 
 print("Welcome to (Fengchun Fan, ffan005, 01)'s Feature Selection Algorithm")
 #num_feature = int(input("Please enter total number of features: "))
@@ -160,6 +165,14 @@ print("total number of instances in this dataset is:", num_instances)
 print("size of the dataset to double check:", len(dataset), "x", len(dataset[0]))
 print()
 #print(dataset[1][0])
+
+print("Do you want to normalize the current dataset?")
+normalize_option = input("Type \"yes\" to normalize, else to continue without normalization: ")
+if(normalize_option == "yes"):
+    print("first feature instance before normalize:", dataset[0][1])
+    normalize(dataset, num_feature)
+    print("first feature instance after normalize:", dataset[0][1])
+print()
 
 print("Type the number of the algorithm you want to run.")
 print("1. Forward Selection")
