@@ -135,6 +135,72 @@ def Backward_Elimination(num_feature, dataset, num_instances):
             done = True    
     print("Finished search!! The best feature subset is", best_feature, "which has an accuracy of", highest_accuracy, "%")
 
+#idea based on Recursive Feature Elimination
+#perform feature selection with single features and rank them with lowest to highest rank based on accuracy
+#after that, from all feature sets, start removing feature number from lowest to highest ranked features
+#this is definitely faster than backward elimination, even it need one extra step of calculating the ranking of features
+#it decides beforehand with feature to eliminate already, for example, in first interaction, instead of trying num_of_features features, we just need 1 step instead
+#if there is a tie, then try all tied features
+#accuracy not determined, but time and efficiency definitely went up.
+def Personalized_Elimination(num_feature, dataset, num_instances):
+    print("You have chosen my Personalized_Elimination Method")
+    #ranking single features
+    sort_features = []
+    for i in range(1, num_feature + 1):
+            temp_node = Node([i], evaluation([i], dataset, num_instances))
+            print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
+            sort_features.append((i, temp_node.get_evaluation()))
+    #print(sort_features)
+    sorted_features = sorted(sort_features, key=lambda x: x[1])
+    print("after sorting the feature, we can obtain the following list: ")
+    print(sorted_features) #[(i, i_accuracy)...]
+    #print(sorted_features[0][0], sorted_features[0][1])
+    
+    feature = []
+    best_feature = []
+    for i in range(1, num_feature+1):
+        feature = feature + [i] 
+        best_feature = best_feature + [i]
+    highest_accuracy = evaluation(feature, dataset, num_instances)
+    print()
+    print("Using all features, I got an accuracy of", highest_accuracy, "%")
+    print()
+    print("Beginning search.")
+    print()
+    done = False
+    level = 0
+
+    while(done == False):
+        temp_highest_accuracy = 0
+        temp_best_feature = []
+        start_time = time.time()
+        for i in range(1, num_feature + 1):
+            copy_feature = feature.copy()
+            if i in copy_feature:
+                copy_feature.remove(i)
+                temp_node = Node(copy_feature, evaluation(copy_feature, dataset, num_instances))
+                print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
+                if(temp_node.get_evaluation() > temp_highest_accuracy):
+                    temp_highest_accuracy = temp_node.get_evaluation()
+                    temp_best_feature = temp_node.get_features()
+        end_time = time.time()
+        time_spent = end_time - start_time
+        print("Feature set", temp_best_feature, "was best, accuracy is", temp_highest_accuracy, "%")
+        print("The step has taken approximate time of: ", round(time_spent,5), "seconds")
+        print()
+        if(temp_highest_accuracy >= highest_accuracy):
+            highest_accuracy = temp_highest_accuracy
+            best_feature = temp_best_feature
+            feature = temp_best_feature
+        else:
+            print("(Warning, Accuracy has decreased!)")
+            feature = temp_best_feature #continues
+            print()
+        level += 1
+        if(level == num_feature):
+            done = True    
+    print("Finished search!! The best feature subset is", best_feature, "which has an accuracy of", highest_accuracy, "%")
+
 #each feature column normalize with (f_i-min_col)/(max_col-min_col)
 #dataset passed in by reference, changes will inherit
 def normalize_r(dataset, num_feature, num_instances):
@@ -240,14 +306,17 @@ print()
 print("Type the number of the algorithm you want to run.")
 print("1. Forward Selection")
 print("2. Backward Selection")
+print("3. Personalized Selection")
 
 selected_algorithm = 0
-while(selected_algorithm != 1 and selected_algorithm != 2):
+while(selected_algorithm != 1 and selected_algorithm != 2 and selected_algorithm != 3):
     selected_algorithm = int(input())
     if(selected_algorithm == 1):
         Forward_Selection(num_feature, dataset, num_instances)
     elif(selected_algorithm == 2):
         Backward_Elimination(num_feature, dataset, num_instances)
+    elif(selected_algorithm == 3):
+        Personalized_Elimination(num_feature, dataset, num_instances)
     else:
         print("invalid choice")
 print()
