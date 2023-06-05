@@ -152,10 +152,12 @@ def Personalized_Elimination(num_feature, dataset, num_instances):
             sort_features.append((i, temp_node.get_evaluation()))
     #print(sort_features)
     sorted_features = sorted(sort_features, key=lambda x: x[1])
+    print()
     print("after sorting the feature, we can obtain the following list: ")
     print(sorted_features) #[(i, i_accuracy)...]
     #print(sorted_features[0][0], sorted_features[0][1])
     
+    #getting accuracy using all features
     feature = []
     best_feature = []
     for i in range(1, num_feature+1):
@@ -174,15 +176,27 @@ def Personalized_Elimination(num_feature, dataset, num_instances):
         temp_highest_accuracy = 0
         temp_best_feature = []
         start_time = time.time()
-        for i in range(1, num_feature + 1):
+    
+        #if (x, x_accuracy), x exist in current feature set, add it to remove list
+        #if (x) is not at the end of list, and its accuracy is tieing the next instance's accuracy, continue, else break
+        feature_remove = []
+        for x in range(len(sorted_features)):
+            if(sorted_features[x][0] in feature):
+                feature_remove.append(sorted_features[x][0])
+                if x != len(sorted_features) - 1:
+                    for y in range(x+1, len(sorted_features)):
+                        if(sorted_features[y][1] == sorted_features[x][1] and sorted_features[y][0] in feature):
+                            feature_remove.append(sorted_features[y][0])
+                break
+        print("features to be removed in this term is: ", feature_remove)        
+        for i in range(len(feature_remove)):
             copy_feature = feature.copy()
-            if i in copy_feature:
-                copy_feature.remove(i)
-                temp_node = Node(copy_feature, evaluation(copy_feature, dataset, num_instances))
-                print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
-                if(temp_node.get_evaluation() > temp_highest_accuracy):
-                    temp_highest_accuracy = temp_node.get_evaluation()
-                    temp_best_feature = temp_node.get_features()
+            copy_feature.remove(feature_remove[i])
+            temp_node = Node(copy_feature, evaluation(copy_feature, dataset, num_instances))
+            print("using feature(s)", temp_node.get_features(), "accuracy is", temp_node.get_evaluation(), "%")
+            if(temp_node.get_evaluation() > temp_highest_accuracy):
+                temp_highest_accuracy = temp_node.get_evaluation()
+                temp_best_feature = temp_node.get_features()
         end_time = time.time()
         time_spent = end_time - start_time
         print("Feature set", temp_best_feature, "was best, accuracy is", temp_highest_accuracy, "%")
