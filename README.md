@@ -7,3 +7,5 @@ referenced resources:
 https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
 
 https://sparkbyexamples.com/python/sort-using-lambda-in-python/
+
+https://machinelearningmastery.com/rfe-feature-selection-in-python/
